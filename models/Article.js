@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-
+var Note = require("./Note");
 // Save a reference to the Schema constructor
 var Schema = mongoose.Schema;
 
@@ -22,6 +22,14 @@ var ArticleSchema = new Schema({
   note: {
     type: Schema.Types.ObjectId,
     ref: "Note"
+  },
+  summary: {
+    type: String,
+    required: true
+  },
+  saved: {
+    type:Boolean,
+    default: false
   }
 });
 
