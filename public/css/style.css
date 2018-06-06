@@ -15,6 +15,8 @@ body {
   overflow: auto;
   width: 60%;
   height: 700px;
+  font-size: 20px;
+  color: white;
   
 }
 
@@ -27,7 +29,8 @@ textarea,
 input {
   display: block;
   width: 100%;
-  background-color: #FCF5C7;
+  /* background-color: #FCF5C7; */
+  background-color:hotpink;
 }
 
 input {
@@ -45,8 +48,11 @@ nav {
 }
 h3{
   font-size: 20px;
-  color: teal;
+  color:white;
 }
-p.link{
-  color:blue;
+.link{
+  color:yellowgreen;
+}
+h1, h2{
+  color: rgb(255, 192, 231);
 }
