@@ -1,30 +1,59 @@
-
+$.getJSON("/articles", function(data) {
+for (var i = 0; i < data.length; i++) {
+  //     // Display the apropos information on the page
+      $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+    }
+  });
 
 // // When user clicks the Scrape articles button, display table sorted by weight
-// $("#scrapeArticles").on("click", function() {
+$(document).on("click", "#scrapeArticles", function()  {
 
 //  // Grab the articles as a json
-// $.getJSON("/articles", function(data) {
-//   // For each one
-//   for (var i = 0; i < data.length; i++) {
-//     // Display the apropos information on the page
-//     $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-//   }
-// });
-// });
+$.ajax({
+  method: "GET",
+  url: "/scrape",
+}).then(function(data){
+  for (var i = 0; i < data.length; i++) {
+  $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+  $("#articles").append("<button data-id='" + data._id + "' id='saveArticle'>Save Article</button>");
+  $("#articles").append("<button data-id='" + data._id + "' id='deleteArticle'>Delete Article</button>");
+  }
+})
 
-// // When user clicks the saved articles button, display the saved articles
-// $("#savedArticles").on("click", function() {
+});
+$("#saveArticle").on("click", function() {
+  var thisId = $(this).attr("data-id");
+  $.ajax({
+      method: "POST",
+      url: "/articles/save/" + thisId
+  }).done(function(data) {
+      window.location = "/"
+  })
+});
+$("#deleteArticle").on("click", function() {
+  var thisId = $(this).attr("data-id");
+  $.ajax({
+      method: "POST",
+      url: "/articles/delete/" + thisId
+  }).done(function(data) {
+      window.location = "/saved"
+  })
+});
+
+// // // When user clicks the saved articles button, display the saved articles
+$("#savedArticles").on("click", function() {
   
   
-//   $.getJSON("/articles/save", function(data) {
-// //     // For each one
-//     for (var i = 0; i < data.length; i++) {
-// //       // Display the apropos information on the page
-//       $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
-//     }
-//   });
-// });
+  //  // Grab the articles as a json
+$.ajax({
+  method: "GET",
+  url: "/articles/save/",
+}).then(function(data){
+  for (var i = 0; i < data.length; i++) {
+  $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+  }
+});
+});
 
 // Whenever someone clicks a p tag
 $(document).on("click", "p", function() {

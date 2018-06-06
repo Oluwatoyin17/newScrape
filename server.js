@@ -51,7 +51,7 @@ app.use(express.static("public"));
 // A GET route for scraping the nytimes website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with request
-  request("http://www.nytimes.com/", function(error, response, html) {
+  request("http://www.nytimes.com", function(error, response, html) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(html);
 
@@ -71,9 +71,10 @@ app.get("/scrape", function(req, res) {
         .children("a")
         .attr("href");
 
-        console.log(results);
+        console.log(result);
+        Article.remove({})
       // Create a new Article using the `result` object built from scraping
-      db.Article.create(result)
+      Article.create(result)
         .then(function(dbArticle) {
           // View the added result in the console
           console.log(dbArticle);
@@ -92,7 +93,7 @@ app.get("/scrape", function(req, res) {
 // Route for getting all Articles from the db
 app.get("/articles", function(req, res) {
   // Grab every document in the Articles collection
-  db.Article.find({})
+  Article.find({})
     .then(function(dbArticle) {
       // If we were able to successfully find Articles, send them back to the client
       res.json(dbArticle);
@@ -106,7 +107,7 @@ app.get("/articles", function(req, res) {
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", function(req, res) {
   // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-  db.Article.findOne({ _id: req.params.id })
+  Article.findOne({ _id: req.params.id })
     // ..and populate all of the notes associated with it
     .populate("note")
     .then(function(dbArticle) {
@@ -122,12 +123,12 @@ app.get("/articles/:id", function(req, res) {
 // Route for saving/updating an Article's associated Note
 app.post("/articles/save/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
-  db.Note.create(req.body)
+  Note.create(req.body)
     .then(function(dbNote) {
       // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-      return db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: true });
+      return Article.findOneAndUpdate({ _id: req.params.id }, { saved: true });
     })
     .then(function(dbArticle) {
       // If we were able to successfully update an Article, send it back to the client
@@ -140,9 +141,9 @@ app.post("/articles/save/:id", function(req, res) {
 });
 // Route for deleting an Article's associated Note
 app.post("/articles/delete/:id", function(req, res) {
-  db.Note.create(req.body)
+  Note.create(req.body)
     .then(function(dbNote) {
-return db.Article.findOneAndUpdate({ _id: req.params.id }, { saved: false });
+return Article.findOneAndUpdate({ _id: req.params.id }, { saved: false });
     })
     .then(function(dbArticle) {
       // If we were able to successfully update an Article, send it back to the client
