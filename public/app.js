@@ -27,7 +27,7 @@ $("#saveArticle").on("click", function() {
       method: "POST",
       url: "/articles/save/" + thisId
   }).done(function(data) {
-      window.location = "/"
+      location.reload();
   })
 });
 $("#deleteArticle").on("click", function() {
@@ -36,7 +36,7 @@ $("#deleteArticle").on("click", function() {
       method: "POST",
       url: "/articles/delete/" + thisId
   }).done(function(data) {
-      window.location = "/saved"
+      location.reload();
   })
 });
 
