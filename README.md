@@ -1,7 +1,7 @@
 # newScraper
 A web app that scrapes articles from New York Times and lets users to view and leave comments on the latest news.
 
-[newScraper app here](https://vast-plateau-65371.herokuapp.com/)
+[Check out newScraper app here](https://vast-plateau-65371.herokuapp.com/)
 
 ## Technologies Used
 - Node.js
