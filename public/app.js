@@ -1,7 +1,7 @@
 $.getJSON("/articles", function(data) {
 for (var i = 0; i < data.length; i++) {
   //     // Display the apropos information on the page
-      $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "</p>");
+      $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "<br />" + data[i].summary + "</p>");
     }
   });
 
@@ -11,14 +11,10 @@ $(document).on("click", "#scrapeArticles", function()  {
 //  // Grab the articles as a json
 $.ajax({
   method: "GET",
-  url: "/scrape",
-}).then(function(data){
-  for (var i = 0; i < data.length; i++) {
-  $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].link + "<br />" + data[i].summary + "</p>");
-  $("#articles").append("<button data-id='" + data._id + "' id='saveArticle'>Save Article</button>");
-  $("#articles").append("<button data-id='" + data._id + "' id='deleteArticle'>Delete Article</button>");
-  }
+  url: "/scrape"
 })
+location.reload();
+
 
 });
 $("#saveArticle").on("click", function() {
@@ -71,7 +67,7 @@ $(document).on("click", "p", function() {
     .then(function(data) {
       console.log(data);
       // The title of the article
-      $("#notes").append("<h2>" + data.title + "</h2>");
+      $("#notes").append("<h3>" + data.title + "</h3>");
       // An input to enter a new title
       $("#notes").append("<input id='titleinput' name='title' >");
       // A textarea to add a new note body
